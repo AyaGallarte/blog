@@ -3,25 +3,24 @@ import { Form, Button, Col, Row, Container } from 'react-bootstrap';
 import { useNavigate, Navigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import UserContext from '../context/UserContext';
-import '../style.css';
 
 export default function Login() {
     const { user, setUser } = useContext(UserContext);
     const navigate = useNavigate(); 
 
-    const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [isActive, setIsActive] = useState(true);
 
     function authenticate(e) {
         e.preventDefault();
-        fetch('https://ra-server-nom3.onrender.com/users/login', {
+        fetch('https://blog-server-nhh1.onrender.com/users/login', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                email: email,
+                username: username,
                 password: password
             })
         })
@@ -30,7 +29,7 @@ export default function Login() {
             if(data.access !== undefined){
                 localStorage.setItem('token', data.access);
                 retrieveUserDetails(data.access);
-                setEmail('');
+                setUsername('');
                 setPassword('');
                 Swal.fire({
                     title: "Login Successful",
@@ -38,12 +37,15 @@ export default function Login() {
                     text: "You are now logged in.",
                     showConfirmButton: false,
                     timer: 1500
+                })
+                .then(() => {
+                    navigate('/');
                 });
-            } else if (data.error === "Email and password do not match") {
+            } else if (data.error === "Username and password do not match") {
                 Swal.fire({
                     title: "Login Failed",
                     icon: "error",
-                    text: "Incorrect email or password.",
+                    text: "Incorrect username or password.",
                     customClass: {
                         confirmButton: 'sweet-warning'
                     }
@@ -52,7 +54,7 @@ export default function Login() {
                 Swal.fire({
                     title: "User Not Found",
                     icon: "error",
-                    text: `${email} does not exist.`,
+                    text: `${username} does not exist.`,
                     customClass: {
                         confirmButton: 'sweet-warning'
                     }
@@ -62,7 +64,7 @@ export default function Login() {
     }
 
     function retrieveUserDetails(token){
-        fetch('https://ra-server-nom3.onrender.com/users/details', {
+        fetch('https://blog-server-nhh1.onrender.com/users/details', {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -77,12 +79,12 @@ export default function Login() {
     }
 
     useEffect(() => {
-        if(email !== '' && password !== ''){
+        if(username !== '' && password !== ''){
             setIsActive(true);
         } else {
             setIsActive(false);
         }
-    }, [email, password]);
+    }, [username, password]);
 
     return (    
         (user.id !== null && user.id !== undefined) ?
@@ -95,14 +97,14 @@ export default function Login() {
                         <Form onSubmit={(e) => authenticate(e)} className="login-form">
                             <h2 className="text-center">Login</h2>
                             <Form.Group>
-                                <Form.Label>Email address </Form.Label>
+                                <Form.Label>Username </Form.Label>
                                 <Form.Control 
-                                    id="loginEmail"
-                                    type="email" 
-                                    placeholder="Enter email" 
+                                    id="loginUsername"
+                                    type="username" 
+                                    placeholder="Enter username" 
                                     required
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
                                 />
                             </Form.Group>
 
@@ -118,8 +120,9 @@ export default function Login() {
                                 />
                             </Form.Group>
 
+                            <div className="login-button">
                             { isActive ? 
-                                <Button className="btn" variant="primary" type="submit" id="loginBtn">
+                                <Button className="btn" variant="success" type="submit" id="loginBtn">
                                     Login
                                 </Button>
                                 : 
@@ -127,6 +130,7 @@ export default function Login() {
                                     Login
                                 </Button>
                             }
+                            </div>
                         </Form>
                     </Col>
                 </Row>
