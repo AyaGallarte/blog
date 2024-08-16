@@ -4,14 +4,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { UserProvider } from './context/UserContext';
 import AppNavbar from './components/AppNavbar';
-
 import Home from './pages/Home';
 import Register from './pages/Register';
 import Login from './pages/Login';
-import Logout from './pages/Logout';
-import ViewAllPosts from './components/ViewAllPosts';
-import UserView from './pages/UserView';
-import Post from './pages/Post';
+
 
 function App() {
   const [user, setUser] = useState({
@@ -66,10 +62,6 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/logout" element={<Logout />} />
-            <Route path="/viewAllPosts" element={<ViewAllPosts />} />
-            <Route path="/userView" element={<UserView />} />
-            <Route path="/posts/:postId" element={<Post />} />
           </Routes>
         </Container>
       </Router>
