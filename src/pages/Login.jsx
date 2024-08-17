@@ -78,7 +78,7 @@ export default function Login() {
 
         setTimeout(() => {
               authenticate(e);          
-        }, 1000);  
+        }, 5000);  
     }
 
     const retrieveUserDetails = async (token) => {

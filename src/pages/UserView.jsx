@@ -164,8 +164,8 @@ export default function UserView({ posts }) {
                             <Card.Body className="cardBody">
                                 <Card.Title className="custom-card-title">{post.title}</Card.Title>
                                 <Card.Text className="custom-card-description">
-                                    {expanded[post._id] ? post.content : truncate(post.content, 100)}
-                                    {post.content.length > 100 && (
+                                    {expanded[post._id] ? post.content : truncate(post.content, 300)}
+                                    {post.content.length > 300 && (
                                         <Button
                                             className="read-more"
                                             variant="link"

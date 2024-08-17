@@ -46,6 +46,14 @@ export default function Post() {
         setShowModal(true);
     };
 
+    const handleEditComment = (commentId, commentText) => {
+        console.log('handleEdit ' + commentText); // commentText is okay here
+        setIsEditing(true);
+        setCommentText(commentText); 
+        setEditCommentId(commentId);
+        setShowModal(true);
+    };
+
     const handleSaveComment = async (postId, comment) => {
         let token = localStorage.getItem('token');
         try {

@@ -96,7 +96,7 @@ export default function Register() {
               .finally(() => {
                   closeModal();
               });
-            }, 1000);    
+            }, 5000);    
     };
 
     return (
