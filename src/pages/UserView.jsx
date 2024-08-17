@@ -151,15 +151,15 @@ export default function UserView({ posts }) {
 
     return (
         <Container className="container">
-            <div inert>
+            <div>
             <Button className="addpost-button btn btn-danger w-20" id="button-post-page" onClick={handleAddPost}>
                 Add Post
             </Button>
             </div>
             <h2 className="page-title text-center">Posts</h2>
-            <Row className="mt-4">
+            <Row className="postCard">
                 {userPosts.map(post => (
-                    <Col key={post._id} xs={12} md={6} className="mb-4">
+                    <Col key={post._id} xs={12} md={10} className="mb-4">
                         <Card className="card h-100">
                             <Card.Body className="cardBody">
                                 <Card.Title className="custom-card-title">{post.title}</Card.Title>
@@ -185,7 +185,7 @@ export default function UserView({ posts }) {
                                 </Card.Text>
                             </Card.Body>
                             <Card.Footer className="card-footer">
-                                <Link to={`/posts/${post._id}`} className="btn btn-danger w-50">
+                                <Link to={`/posts/${post._id}`} className="btn btn-danger w-20">
                                     Continue Reading
                                 </Link>
                                 <Button 
@@ -194,7 +194,7 @@ export default function UserView({ posts }) {
                                     className="ml-2"
                                     disabled={post.userId !== user.id} // Only the owner of the post can edit
                                 >
-                                    Edit Post
+                                    Edit
                                 </Button>
                                 <Button 
                                     variant="danger"
@@ -202,7 +202,7 @@ export default function UserView({ posts }) {
                                     className="ml-2"
                                     disabled={post.userId !== user.id} // Only the owner of the post can delete
                                 >
-                                    Delete Post
+                                    Delete
                                 </Button>
                             </Card.Footer>
                         </Card>

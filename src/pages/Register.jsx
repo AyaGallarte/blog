@@ -3,9 +3,11 @@ import { Form, Button, Col, Row, Container } from 'react-bootstrap';
 import { useNavigate, Navigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import UserContext from '../context/UserContext';
+import { useProgress } from '../context/ProgressContext';
 
 export default function Register() {
     const { user } = useContext(UserContext);
+    const { startProgress, closeModal } = useProgress();
     const navigate = useNavigate(); 
 
     // State hooks to store the values of the input fields
@@ -87,7 +89,14 @@ export default function Register() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        makeAPICall({ username, email, password });
+        startProgress();
+
+        setTimeout(() => {
+              makeAPICall({ username, email, password })
+              .finally(() => {
+                  closeModal();
+              });
+            }, 1000);    
     };
 
     return (

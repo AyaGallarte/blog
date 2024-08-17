@@ -63,7 +63,7 @@ body {
 }
 
 .card-footer .btn {
-    margin: 0 5px; /* Add horizontal margin to individual buttons if needed */
+    margin: 0 1px; /* Add horizontal margin to individual buttons if needed */
 }
 
 .card {
@@ -84,4 +84,23 @@ body {
     justify-content: left;
     align-items: center;
     margin-left: 16px;
+}
+
+.progress-bar {
+    background-color: #47e000b5;
+}
+
+.progress-bar-header {
+    display: none;
+}
+
+.progress-bar-body {
+    height: 0;
+    padding: 0;
+    margin: 0;
+}
+
+.postCard {
+    display: flex;
+    justify-content: center;
 }

@@ -2,13 +2,18 @@ import { useState, useEffect, useContext } from 'react';
 //import AdminView from '../components/AdminView';
 import UserView from '../pages/UserView';
 import UserContext from '../context/UserContext';
-
+import { useProgress } from '../context/ProgressContext';
+import ProgressBar from '../components/ProgressBar';
 
 export default function ViewAllPosts() {
     const [posts, setPosts] = useState([]);
-    const {user} = useContext(UserContext);
+    const [loading, setLoading] = useState(true); // Loading state
+    const { user } = useContext(UserContext);
+    const { startProgress, closeModal, show, progress } = useProgress();
 
     const fetchData = async () => {
+        setLoading(true); // Start loading
+
         let fetchUrl = "https://blog-server-nhh1.onrender.com/posts/getPosts";
 
         try {
@@ -24,37 +29,42 @@ export default function ViewAllPosts() {
 
             const data = await response.json();
 
-            // Check if the response has a message indicating no posts found
             if (data.message === "No posts found") {
                 setPosts([]);
             } else if (data.posts) {
                 setPosts(data.posts);
             } else {
-                // Handle unexpected response structure
                 console.error("Unexpected response structure:", data);
                 setPosts([]);
             }
         } catch (error) {
-            // Handle fetch or network errors
             console.error("Error fetching data:", error);
             setPosts([]);
+        } finally {
+            closeModal();
+            setLoading(false); // End loading
         }
     };
 
+    useEffect(() => {
+        startProgress();
 
-   useEffect(() => {
+        const timer = setTimeout(() => {
+            fetchData().finally(() => {
+                closeModal(); // Close the progress bar after fetching data
+            });
+        }, 1000);
 
-        fetchData();
+        return () => clearTimeout(timer);
+    }, []); // Empty dependency array to ensure it only runs on the initial load
 
-    }, [user]);
-
-    return(
-       
-        (user.isAdmin === true)
-        ?
-            <AdminView posts={posts} fetchData={fetchData}/>
-        :
-            <UserView posts={posts} fetchData={fetchData}/>
-            
-    )
+    return (
+        <>
+            {loading && show && <ProgressBar progress={progress} />} {/* Show progress bar only during loading */}
+            {user.isAdmin
+                ? <AdminView posts={posts} fetchData={fetchData} />
+                : <UserView posts={posts} fetchData={fetchData} />
+            }
+        </>
+    );
 }
