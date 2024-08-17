@@ -13,7 +13,7 @@ import Logout from './pages/Logout';
 import ViewAllPosts from './components/ViewAllPosts';
 import UserView from './pages/UserView';
 import Post from './pages/Post';
-//https://blog-server-nhh1.onrender.com
+
 function App() {
   const [user, setUser] = useState({
     id: null,
