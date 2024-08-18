@@ -24,7 +24,7 @@ export default function Login() {
 
         setTimeout(() => {
             authenticate();
-        }, 1000);
+        }, 5000);
     };
 
     const authenticate = async () => {
