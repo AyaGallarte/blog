@@ -1,3 +1,154 @@
+// import { useState, useEffect, useContext } from 'react';
+// import { Form, Button, Col, Row, Container } from 'react-bootstrap';
+// import { useNavigate, Navigate } from 'react-router-dom';
+// import Swal from 'sweetalert2';
+// import UserContext from '../context/UserContext';
+// import { useProgress } from '../context/ProgressContext';
+
+// export default function Login() {
+//     const { user, setUser } = useContext(UserContext);
+//     const { startProgress, closeModal } = useProgress();
+//     const navigate = useNavigate(); 
+
+//     const [username, setUsername] = useState("");
+//     const [password, setPassword] = useState("");
+//     const [isActive, setIsActive] = useState(false); // Default to inactive until inputs are filled
+
+//     const authenticate = async (e) => {
+//         e.preventDefault();
+
+//         try {
+//             const response = await fetch('https://blog-server-nhh1.onrender.com/users/login', {
+//                 method: 'POST',
+//                 headers: {
+//                     "Content-Type": "application/json"
+//                 },
+//                 body: JSON.stringify({
+//                     username: username,
+//                     password: password
+//                 })
+//             });
+//             const data = await response.json();
+            
+//             if (data.access) {
+//                 localStorage.setItem('token', data.access);
+//                 retrieveUserDetails(data.access);
+//                 setUsername('');
+//                 setPassword('');
+//                 Swal.fire({
+//                     title: "Login Successful",
+//                     icon: "success",
+//                     text: "You are now logged in.",
+//                     showConfirmButton: false,
+//                     timer: 1500
+//                 })
+//                 .then(() => {
+//                     navigate('/');
+//                 });
+//             } else if (data.error === "Username and password do not match") {
+//                 Swal.fire({
+//                     title: "Login Failed",
+//                     icon: "error",
+//                     text: "Incorrect username or password.",
+//                     customClass: {
+//                         confirmButton: 'sweet-warning'
+//                     }
+//                 });
+//             } else {
+//                 Swal.fire({
+//                     title: "User Not Found",
+//                     icon: "error",
+//                     text: `${username} does not exist.`,
+//                     customClass: {
+//                         confirmButton: 'sweet-warning'
+//                     }
+//                 });
+//             }
+//         } catch (error) {
+//             console.error("Error during authentication:", error);
+//         } finally {
+//             closeModal(); // Close progress bar after login attempt
+//         }
+//     };
+
+//     const handleSubmit = (e) => {
+//         e.preventDefault();
+ 
+//         startProgress();
+
+//         setTimeout(() => {
+//               authenticate(e);          
+//         }, 5000);  
+//     }
+
+//     const retrieveUserDetails = async (token) => {
+//         try {
+//             const response = await fetch('https://blog-server-nhh1.onrender.com/users/details', {
+//                 headers: {
+//                     Authorization: `Bearer ${token}`
+//                 }
+//             });
+//             const data = await response.json();
+//             setUser({
+//                 id: data.user._id,
+//                 isAdmin: data.user.isAdmin
+//             });
+//         } catch (error) {
+//             console.error("Error retrieving user details:", error);
+//         }
+//     }
+
+//     useEffect(() => {
+//         setIsActive(username !== '' && password !== ''); // Activate the button when inputs are filled
+//     }, [username, password]);
+
+//     return (    
+//         user.id ? 
+//         <Navigate to="/" />
+//         :
+//         <div className="login-container">
+//             <Container>
+//                 <Row className="justify-content-center">
+//                     <Col md={6}>
+//                         <Form onSubmit={handleSubmit} className="login-form">
+//                             <h2 className="text-center">Login</h2>
+//                             <Form.Group>
+//                                 <Form.Label>Username </Form.Label>
+//                                 <Form.Control 
+//                                     id="loginUsername"
+//                                     type="text" 
+//                                     placeholder="Enter username" 
+//                                     required
+//                                     value={username}
+//                                     onChange={(e) => setUsername(e.target.value)}
+//                                 />
+//                             </Form.Group>
+
+//                             <Form.Group className="mb-3">
+//                                 <Form.Label>Password </Form.Label>
+//                                 <Form.Control 
+//                                     id="loginPassword"
+//                                     type="password" 
+//                                     placeholder="Password" 
+//                                     required
+//                                     value={password}
+//                                     onChange={(e) => setPassword(e.target.value)}
+//                                 />
+//                             </Form.Group>
+
+//                             <div className="login-button">
+//                                 <Button className="btn" variant={isActive ? "success" : "danger"} type="submit" id="loginBtn" disabled={!isActive}>
+//                                     Login
+//                                 </Button>
+//                             </div>
+//                         </Form>
+//                     </Col>
+//                 </Row>
+//             </Container>
+//         </div>
+//     );
+// }
+
 import { useState, useEffect, useContext } from 'react';
 import { Form, Button, Col, Row, Container } from 'react-bootstrap';
 import { useNavigate, Navigate } from 'react-router-dom';
@@ -12,74 +163,67 @@ export default function Login() {
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [isActive, setIsActive] = useState(false); // Default to inactive until inputs are filled
+    const [isActive, setIsActive] = useState(false);
 
-    const authenticate = async (e) => {
+    useEffect(() => {
+        setIsActive(username !== '' && password !== '');
+    }, [username, password]);
+
+    const handleSubmit = (e) => {
         e.preventDefault();
+        startProgress();
 
+        setTimeout(() => {
+            authenticate();
+        }, 1000);
+    };
+
+    const authenticate = async () => {
         try {
             const response = await fetch('https://blog-server-nhh1.onrender.com/users/login', {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({
-                    username: username,
-                    password: password
-                })
+                body: JSON.stringify({ username, password })
             });
+
             const data = await response.json();
-            
-            if (data.access) {
-                localStorage.setItem('token', data.access);
-                retrieveUserDetails(data.access);
-                setUsername('');
-                setPassword('');
-                Swal.fire({
-                    title: "Login Successful",
-                    icon: "success",
-                    text: "You are now logged in.",
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-                .then(() => {
-                    navigate('/');
-                });
-            } else if (data.error === "Username and password do not match") {
-                Swal.fire({
-                    title: "Login Failed",
-                    icon: "error",
-                    text: "Incorrect username or password.",
-                    customClass: {
-                        confirmButton: 'sweet-warning'
-                    }
-                });
-            } else {
-                Swal.fire({
-                    title: "User Not Found",
-                    icon: "error",
-                    text: `${username} does not exist.`,
-                    customClass: {
-                        confirmButton: 'sweet-warning'
-                    }
-                });
-            }
+            handleResponse(data);
         } catch (error) {
             console.error("Error during authentication:", error);
         } finally {
-            closeModal(); // Close progress bar after login attempt
+            closeModal();
         }
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
- 
-        startProgress();
+    const handleResponse = (data) => {
+        if (data.access) {
+            localStorage.setItem('token', data.access);
+            retrieveUserDetails(data.access);
+            setUsername('');
+            setPassword('');
 
-        setTimeout(() => {
-              authenticate(e);          
-        }, 5000);  
-    }
+            Swal.fire({
+                title: "Login Successful",
+                icon: "success",
+                text: "You are now logged in.",
+                showConfirmButton: false,
+                timer: 1500
+            }).then(() => navigate('/'));
+        } else {
+            const errorMessages = {
+                "Username and password do not match": "Incorrect username or password.",
+                "default": `${username} does not exist.`
+            };
+
+            Swal.fire({
+                title: data.error === "Username and password do not match" ? "Login Failed" : "User Not Found",
+                icon: "error",
+                text: errorMessages[data.error] || errorMessages["default"]
+            });
+        }
+    };
 
     const retrieveUserDetails = async (token) => {
         try {
@@ -88,6 +232,7 @@ export default function Login() {
                     Authorization: `Bearer ${token}`
                 }
             });
+
             const data = await response.json();
             setUser({
                 id: data.user._id,
@@ -96,16 +241,11 @@ export default function Login() {
         } catch (error) {
             console.error("Error retrieving user details:", error);
         }
-    }
+    };
 
-    useEffect(() => {
-        setIsActive(username !== '' && password !== ''); // Activate the button when inputs are filled
-    }, [username, password]);
-
-    return (    
-        user.id ? 
+    return user.id ? (
         <Navigate to="/" />
-        :
+    ) : (
         <div className="login-container">
             <Container>
                 <Row className="justify-content-center">
@@ -113,9 +253,8 @@ export default function Login() {
                         <Form onSubmit={handleSubmit} className="login-form">
                             <h2 className="text-center">Login</h2>
                             <Form.Group>
-                                <Form.Label>Username </Form.Label>
+                                <Form.Label>Username</Form.Label>
                                 <Form.Control 
-                                    id="loginUsername"
                                     type="text" 
                                     placeholder="Enter username" 
                                     required
@@ -123,21 +262,18 @@ export default function Login() {
                                     onChange={(e) => setUsername(e.target.value)}
                                 />
                             </Form.Group>
-
                             <Form.Group className="mb-3">
-                                <Form.Label>Password </Form.Label>
+                                <Form.Label>Password</Form.Label>
                                 <Form.Control 
-                                    id="loginPassword"
                                     type="password" 
-                                    placeholder="Password" 
+                                    placeholder="Enter password" 
                                     required
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                 />
                             </Form.Group>
-
                             <div className="login-button">
-                                <Button className="btn" variant={isActive ? "success" : "danger"} type="submit" id="loginBtn" disabled={!isActive}>
+                                <Button variant={isActive ? "success" : "danger"} type="submit" disabled={!isActive}>
                                     Login
                                 </Button>
                             </div>
