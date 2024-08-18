@@ -13,7 +13,6 @@ export default function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [isActive, setIsActive] = useState(false);
-    const [isModalOpen, setIsModalOpen] = useState(true);
 
     useEffect(() => {
         setIsActive(username !== '' && password !== '');
@@ -96,15 +95,7 @@ export default function Login() {
     return user.id ? (
         <Navigate to="/" />
     ) : (
-        <div 
-          className="login-container"
-          role="dialog" 
-          aria-modal="true" 
-          className="fade modal" 
-          tabIndex="-1" 
-          aria-hidden="true"
-          style={isModalOpen ? { display: 'block' } : { display: 'none' }}
-          inert={!isModalOpen}>
+        <div className="login-container">
             <Container>
                 <Row className="justify-content-center">
                     <Col md={6}>
