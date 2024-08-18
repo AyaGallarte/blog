@@ -96,7 +96,15 @@ export default function Login() {
     return user.id ? (
         <Navigate to="/" />
     ) : (
-        <div className="login-container" inert>
+        <div 
+          className="login-container"
+          role="dialog" 
+          aria-modal="true" 
+          className="fade modal" 
+          tabIndex="-1" 
+          aria-hidden="true"
+          style={isModalOpen ? { display: 'block' } : { display: 'none' }}
+          inert={!isModalOpen}>
             <Container>
                 <Row className="justify-content-center">
                     <Col md={6}>
