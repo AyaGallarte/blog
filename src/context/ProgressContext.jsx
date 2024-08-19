@@ -22,7 +22,7 @@ export function ProgressProvider({ children }) {
           return 100;
         }
       });
-    }, 200);
+    }, 500);
   };
 
   const closeModal = () => setShowModal(false);
