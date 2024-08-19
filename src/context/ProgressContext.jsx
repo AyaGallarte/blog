@@ -7,11 +7,11 @@ export const useProgress = () => useContext(ProgressContext);
 
 export function ProgressProvider({ children }) {
   const [progress, setProgress] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [intervalId, setIntervalId] = useState(null);
 
   const startProgress = useCallback(() => {
-    setIsLoading(true);
+    setShowModal(true);
     setProgress(0);
 
     const id = setInterval(() => {
@@ -21,7 +21,7 @@ export function ProgressProvider({ children }) {
 
         if (newProgress >= 100) {
           clearInterval(id);
-          setIsLoading(false); // Close modal when progress is 100%
+          setShowModal(false); // Close modal when progress is 100%
         }
 
         return newProgress;
@@ -35,11 +35,11 @@ export function ProgressProvider({ children }) {
     if (intervalId) {
       clearInterval(intervalId);
     }
-    setIsLoading(false);
+    setShowModal(false);
   };
 
   return (
-    <ProgressContext.Provider value={{ progress, isLoading, showModal, startProgress, closeModal }}>
+    <ProgressContext.Provider value={{ progress, showModal, startProgress, closeModal }}>
       {children}
 
       <Modal show={showModal} onHide={closeModal} centered>
