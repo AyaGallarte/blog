@@ -100,7 +100,7 @@ export default function Login() {
                 <Row className="justify-content-center">
                     <Col md={6}>
                         <Form onSubmit={handleSubmit} className="login-form">
-                            <h2 className="text-center">Login</h2>
+                            <h2 className="text-center pt-2">Login</h2>
                             <Form.Group>
                                 <Form.Label>Username</Form.Label>
                                 <Form.Control 

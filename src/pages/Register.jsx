@@ -80,24 +80,18 @@ export default function Register() {
     };
 
     useEffect(() => {
-        if (username && email && password && confirmPassword && password === confirmPassword) {
-            setIsActive(true);
-        } else {
-            setIsActive(false);
-        }
+        setIsActive(username && email && password && confirmPassword && password === confirmPassword);
     }, [username, email, password, confirmPassword]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
         startProgress();
 
-        setTimeout(() => {
-              makeAPICall({ username, email, password })
-              .finally(() => {
-                  closeModal();
-              });
-            }, 1000);    
-    };
+        makeAPICall({ username, email, password })
+            .finally(() => {
+                closeModal();
+            });
+    };  
 
     return (
         user.id ? 
@@ -107,7 +101,7 @@ export default function Register() {
             <Row className="w-100">
                 <Col md={4} lg={5} className="mx-auto">
                     <Form onSubmit={handleSubmit} className="register-form">
-                        <h2 className="text-center">Register</h2>
+                        <h2 className="text-center pt-2">Register</h2>
                         <p className="text-center">Get our all-time most popular recipes. Sign up now!</p>
                         <Col className="col mx-3">
                             <Form.Group>
