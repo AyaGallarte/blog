@@ -50,12 +50,6 @@ export default function Register() {
                     icon: "error",
                     text: "Invalid email format."
                 });
-            } else if (data.error === "Mobile number invalid") {
-                Swal.fire({
-                    title: "Mobile Number Invalid",
-                    icon: "error",
-                    text: "Invalid mobile number."
-                });
             } else if (data.error === "Password must be at least 8 characters") {
                 Swal.fire({
                     title: "Password Invalid",
