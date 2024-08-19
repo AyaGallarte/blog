@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useCallback } from 'react';
 import { Modal, ProgressBar as BootstrapProgressBar } from 'react-bootstrap';
 
 const ProgressContext = createContext();
@@ -7,28 +7,39 @@ export const useProgress = () => useContext(ProgressContext);
 
 export function ProgressProvider({ children }) {
   const [progress, setProgress] = useState(0);
-  const [showModal, setShowModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [intervalId, setIntervalId] = useState(null);
 
-  const startProgress = () => {
-    setShowModal(true);
+  const startProgress = useCallback(() => {
+    setIsLoading(true);
     setProgress(0);
 
-    const interval = setInterval(() => {
+    const id = setInterval(() => {
       setProgress((prevProgress) => {
-        if (prevProgress < 100) {
-          return prevProgress + 10;
-        } else {
-          clearInterval(interval);
-          return 100;
+        // Increment progress and ensure it does not exceed 100
+        const newProgress = Math.min(prevProgress + Math.random() * 10, 100);
+
+        if (newProgress >= 100) {
+          clearInterval(id);
+          setIsLoading(false); // Close modal when progress is 100%
         }
+
+        return newProgress;
       });
-    }, 100);
+    }, 100); // Slower interval
+
+    setIntervalId(id);
+  }, []);
+
+  const closeModal = () => {
+    if (intervalId) {
+      clearInterval(intervalId);
+    }
+    setIsLoading(false);
   };
 
-  const closeModal = () => setShowModal(false);
-
   return (
-    <ProgressContext.Provider value={{ progress, showModal, startProgress, closeModal }}>
+    <ProgressContext.Provider value={{ progress, isLoading, showModal, startProgress, closeModal }}>
       {children}
 
       <Modal show={showModal} onHide={closeModal} centered>
