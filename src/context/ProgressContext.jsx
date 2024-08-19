@@ -16,13 +16,13 @@ export function ProgressProvider({ children }) {
     const interval = setInterval(() => {
       setProgress((prevProgress) => {
         if (prevProgress < 100) {
-          return prevProgress + 10;
+          return prevProgress * 10;
         } else {
           clearInterval(interval);
           return 100;
         }
       });
-    }, 200);
+    }, 100);
   };
 
   const closeModal = () => setShowModal(false);

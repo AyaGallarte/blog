@@ -21,10 +21,7 @@ export default function Login() {
     const handleSubmit = (e) => {
         e.preventDefault();
         startProgress();
-
-        setTimeout(() => {
-            authenticate();
-        }, 1000);
+        authenticate();
     };
 
     const authenticate = async () => {
